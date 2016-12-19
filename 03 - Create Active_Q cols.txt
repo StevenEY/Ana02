@@ -1,0 +1,29 @@
+Option Compare Database
+
+' ===== Create 4 columns (Active Q1-Q4) =====
+
+
+Public Sub active_quarters()
+
+    DoCmd.SetWarnings False
+    
+
+        Dim strSQL As String
+        
+        sqlrun = "ALTER TABLE STATIC_DATA_xls ADD COLUMN Active_Q1 FLOAT;"
+        DoCmd.RunSQL (sqlrun)
+        
+        sqlrun = "ALTER TABLE STATIC_DATA_xls ADD COLUMN Active_Q2 FLOAT;"
+        DoCmd.RunSQL (sqlrun)
+    
+        sqlrun = "ALTER TABLE STATIC_DATA_xls ADD COLUMN Active_Q3 FLOAT;"
+        DoCmd.RunSQL (sqlrun)
+        
+        sqlrun = "ALTER TABLE STATIC_DATA_xls ADD COLUMN Active_Q4 FLOAT;"
+        DoCmd.RunSQL (sqlrun)
+    
+
+    DoCmd.SetWarnings True
+    
+End Sub
+

@@ -1,0 +1,73 @@
+Option Compare Database
+
+Public Sub imp_data()
+
+    Dim strPathFile As String, strFile As String, strPath As String
+    Dim intWorksheets As Integer
+
+    Dim cdb As DAO.Database
+    Dim tdf As DAO.TableDef
+    Set cdb = CurrentDb
+    DoCmd.SetWarnings False
+
+
+    ' Set filepath to Excel documents to import
+    strPath = "Z:\Advisory\SG Hambros\2016\Analytics\ANA02 - Advisory Fee Income\Import files\"  ' Import issue with non-local
+
+
+    ' Update below vars to indicate if file has multiple tabs
+    Dim AAA_AUM_Q1_Q2_Q3 As Integer
+    AAA_AUM_Q1_Q2_Q3 = 3    ' IMPORTANT: set number of tabs to import. 'Indicates 3 tabs to import
+
+
+
+    strFile = Dir(strPath & "*.xl*")
+    Do While Len(strFile) > 0
+    
+    strPathFile = strPath & strFile
+
+            If strFile = "AAA_AUM_Q1_Q2_Q3.xlsx" Then   ' REDO IN LIST? If so, can state: if * in list
+                For i = 1 To AAA_AUM_Q1_Q2_Q3
+
+                    DoCmd.TransferSpreadsheet acImport, _
+                        acSpreadsheetTypeExcel9, strFile, _
+                        strPathFile, True, _
+                        i & "Q2016" & "$A1:AD1000000"
+            
+            Next
+
+            ElseIf strFile = "STATIC_DATA.xls" Then
+                DoCmd.TransferSpreadsheet acImport, _
+                acSpreadsheetTypeExcel9, strFile, _
+                strPathFile, True, _
+                "$A2:AD65536"
+                
+' ============ Below attempts to remove first row not working ============
+'                Dim SQL As String
+'                SQL = "DELETE FROM (SELECT TOP 2 * FROM STATIC_DATA_xls)"
+'                DoCmd.RunSQL (SQL)
+                
+'                SQLrun = "delete top(1) from STATIC_DATA_xls"
+'                DoCmd.RunSQL (SQLrun)
+            
+
+            Else: ' FEES_GENERATED_ANSWER_Q3.xlsx
+                DoCmd.TransferSpreadsheet acImport, _
+                    acSpreadsheetTypeExcel9, strFile, _
+                    strPathFile, True, _
+                    "$A1:AD65536"
+                
+
+            
+            End If
+            strFile = Dir()
+
+
+       Loop
+
+    DoCmd.SetWarnings True
+ End Sub
+
+
+
+
