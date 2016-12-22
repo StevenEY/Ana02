@@ -2,7 +2,7 @@ Option Compare Database
 
 Sub populate_active_quarter_cols()
 
-    ' ===== Populating Active_Q1-Q4 columns (in table: STATIC_DATA_xls) with decimal figure representing how much of the quarter has been charged =====
+    ' ===== Populating Active_Q1-Q4 columns (in table: STATIC_DATA) with decimal figure representing how much of the quarter has been charged =====
     ' ===== E.g. 1 = Whole quarter charged. 0 = Whole quarter not charged. 0.5 = half of quarter charged. =====
     ' ===== Note: the calculation for 1Q16 and 2Q16 are different from the calculation for other quarters =====
 
@@ -18,256 +18,256 @@ Sub populate_active_quarter_cols()
 'Active
 'Never modified
     'Currently active and no mod_date
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q1 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date] IS NULL, 1) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date] IS NULL));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q1 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date] IS NULL, 1) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date] IS NULL));"
     DoCmd.RunSQL (sqlrun)
     
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q2 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date] IS NULL, 1) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date] IS NULL));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q2 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date] IS NULL, 1) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date] IS NULL));"
     DoCmd.RunSQL (sqlrun)
     
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q3 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date] IS NULL, 1) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date] IS NULL));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q3 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date] IS NULL, 1) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date] IS NULL));"
     DoCmd.RunSQL (sqlrun)
     
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q4 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date] IS NULL, 1) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date] IS NULL));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q4 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date] IS NULL, 1) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date] IS NULL));"
     DoCmd.RunSQL (sqlrun)
 
 '<current_year
     ' Currently active and mod_date before current_year
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q1 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "# ,1) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "#));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q1 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "# ,1) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "#));"
     DoCmd.RunSQL (sqlrun)
 
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q2 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "# ,1) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "#));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q2 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "# ,1) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "#));"
     DoCmd.RunSQL (sqlrun)
 
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q3 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "# ,1) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "#));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q3 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "# ,1) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "#));"
     DoCmd.RunSQL (sqlrun)
 
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q4 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "# ,1) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "#));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q4 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "# ,1) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "#));"
     DoCmd.RunSQL (sqlrun)
 
     If current_year = 2016 Then
 '1Q16
         ' Currently active. mod_date during Q1. Q1 = 0, Q2-4 = 1.
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q1 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,0) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q1 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,0) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
 
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q2 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,1) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q2 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,1) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
 
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q3 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,1) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q3 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,1) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
 
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q4 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,1) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q4 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,1) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
 
 '2Q16
         ' Currently active. mod_date during Q2. Q1-2 = 0, Q3-4 = 1.
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q1 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,0) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q1 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,0) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
 
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q2 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,0) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q2 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,0) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
 
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q3 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,1) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q3 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,1) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
 
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q4 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,1) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q4 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,1) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
 
     Else  'If not 2016 (active)
 
 '1Q
         ' Currently active. mod_date during Q1. Q1 = 0.#, Q2-4 = 1.
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q1 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,DateDiff(""d"", [STATIC_DATA_xls]![Fee Bandings Last Modified Date], #3/31/" & current_year & "#)/91) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q1 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,DateDiff(""d"", [STATIC_DATA]![Fee Bandings Last Modified Date], #3/31/" & current_year & "#)/91) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
     
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q2 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,1) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q2 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,1) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
     
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q3 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,1) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q3 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,1) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
     
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q4 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,1) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q4 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,1) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
 
 '2Q
         ' Currently active. mod_date during Q2. Q1 = 0, Q2 = 0.#, Q3-4 = 1.
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q1 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,0) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q1 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,0) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
     
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q2 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,DateDiff(""d"", [STATIC_DATA_xls]![Fee Bandings Last Modified Date], #6/30/" & current_year & "#)/91) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q2 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,DateDiff(""d"", [STATIC_DATA]![Fee Bandings Last Modified Date], #6/30/" & current_year & "#)/91) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
     
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q3 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,1) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q3 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,1) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
     
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q4 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,1) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q4 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,1) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
 
     End If
 
 '3Q/3Q16
     'Currently active. mod_date during Q3. Q1-2 = 0, Q3 = 0.#, Q4 = 1.
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q1 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#,0) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q1 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#,0) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#));"
     DoCmd.RunSQL (sqlrun)
 
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q2 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#,0) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#));"
-    DoCmd.RunSQL (sqlrun)
-
-
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q3 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#, DateDiff(""d"", [STATIC_DATA_xls]![Fee Bandings Last Modified Date], #9/30/" & current_year & "#)/91) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q2 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#,0) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#));"
     DoCmd.RunSQL (sqlrun)
 
 
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q4 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#,1) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q3 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#, DateDiff(""d"", [STATIC_DATA]![Fee Bandings Last Modified Date], #9/30/" & current_year & "#)/91) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#));"
+    DoCmd.RunSQL (sqlrun)
+
+
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q4 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#,1) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#));"
     DoCmd.RunSQL (sqlrun)
 
 '4Q/4Q16
     'Currently active. mod_date during Q4. Q1-3 = 0, Q4 = 0.#.
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q1 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#,0) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q1 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#,0) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#));"
     DoCmd.RunSQL (sqlrun)
 
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q2 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#,0) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q2 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#,0) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#));"
     DoCmd.RunSQL (sqlrun)
 
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q3 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#,0) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q3 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#,0) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#));"
     DoCmd.RunSQL (sqlrun)
 
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q4 = IIf([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#, DateDiff(""d"", [STATIC_DATA_xls]![Fee Bandings Last Modified Date], #12/31/" & current_year & "#)/91) WHERE (([STATIC_DATA_xls]![Active]=1 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q4 = IIf([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#, DateDiff(""d"", [STATIC_DATA]![Fee Bandings Last Modified Date], #12/31/" & current_year & "#)/91) WHERE (([STATIC_DATA]![Active]=1 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#));"
     DoCmd.RunSQL (sqlrun)
 
 
 'Inactive
 'Never modified
     'Currently inactive and no mod_date -- Shouldn't be any inactive with no mod_date
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q1 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date] IS NULL, 0) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date] IS NULL));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q1 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date] IS NULL, 0) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date] IS NULL));"
     DoCmd.RunSQL (sqlrun)
     
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q2 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date] IS NULL, 0) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date] IS NULL));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q2 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date] IS NULL, 0) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date] IS NULL));"
     DoCmd.RunSQL (sqlrun)
     
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q3 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date] IS NULL, 0) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date] IS NULL));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q3 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date] IS NULL, 0) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date] IS NULL));"
     DoCmd.RunSQL (sqlrun)
     
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q4 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date] IS NULL, 0) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date] IS NULL));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q4 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date] IS NULL, 0) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date] IS NULL));"
     DoCmd.RunSQL (sqlrun)
 
 '<current_year
     ' Currently inactive and mod_date before 2016
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q1 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "# ,0) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "#));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q1 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "# ,0) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "#));"
     DoCmd.RunSQL (sqlrun)
     
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q2 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "# ,0) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "#));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q2 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "# ,0) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "#));"
     DoCmd.RunSQL (sqlrun)
     
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q3 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "# ,0) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "#));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q3 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "# ,0) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "#));"
     DoCmd.RunSQL (sqlrun)
     
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q4 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "# ,0) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "#));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q4 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "# ,0) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]<#1/1/" & current_year & "#));"
     DoCmd.RunSQL (sqlrun)
 
     If current_year = 2016 Then ' If 2016 (inactive)
 '1Q16
         ' Currently inactive and mod_date during Q1
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q1 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,0) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q1 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,0) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
     
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q2 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,0) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q2 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,0) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
     
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q3 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,0) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q3 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,0) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
     
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q4 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,0) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q4 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,0) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
     
 '2Q16
         ' Currently inactive. mod_date during Q2. Q1 = 1, Q2-4 = 0.
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q1 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,1) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q1 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,1) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
     
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q2 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,0) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q2 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,0) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
     
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q3 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,0) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q3 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,0) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
     
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q4 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,0) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q4 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,0) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
 
     Else  ' If not 2016 (inactive)
 
 '1Q
         ' Currently inactive and mod_date during Q1
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q1 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,DateDiff(""d"", #3/31/" & current_year & "#) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q1 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,DateDiff(""d"", #3/31/" & current_year & "#) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
     
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q2 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,0) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q2 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,0) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
     
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q3 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,0) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q3 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,0) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
     
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q4 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,0) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q4 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#,0) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#1/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#3/31/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
 
 '2Q
         ' Currently inactive. mod_date during Q2. Q1 = 1, Q2 = 0.#, Q3-4 = 0.
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q1 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,1) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q1 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,1) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
     
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q2 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,DateDiff(""d"", #6/30/" & current_year & "#) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q2 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,DateDiff(""d"", #6/30/" & current_year & "#) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
     
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q3 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,0) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q3 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,0) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
     
-        sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q4 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,0) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q4 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#,0) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#4/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#6/30/" & current_year & "#));"
         DoCmd.RunSQL (sqlrun)
 
       End If
 
 '3Q
     'Currently inactive. mod_date during Q3. Q1-2 = 1, Q3 = 0.#, Q4 = 0.
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q1 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#,1) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q1 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#,1) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#));"
     DoCmd.RunSQL (sqlrun)
     
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q2 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#,1) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#));"
-    DoCmd.RunSQL (sqlrun)
-    
-    
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q3 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#, DateDiff(""d"", #7/1/" & current_year & "#, [STATIC_DATA_xls]![Fee Bandings Last Modified Date])/91) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q2 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#,1) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#));"
     DoCmd.RunSQL (sqlrun)
     
     
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q4 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#,0) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q3 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#, DateDiff(""d"", #7/1/" & current_year & "#, [STATIC_DATA]![Fee Bandings Last Modified Date])/91) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#));"
+    DoCmd.RunSQL (sqlrun)
+    
+    
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q4 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#,0) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#7/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#9/30/" & current_year & "#));"
     DoCmd.RunSQL (sqlrun)
 
 '4Q
     'Currently inactive. mod_date during Q4. Q1-3 = 1, Q4 = 0.#.
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q1 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#,1) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q1 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#,1) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#));"
     DoCmd.RunSQL (sqlrun)
 
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q2 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#,1) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q2 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#,1) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#));"
     DoCmd.RunSQL (sqlrun)
 
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q3 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#,1) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q3 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#,1) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#));"
     DoCmd.RunSQL (sqlrun)
 
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q4 = IIf([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#, DateDiff(""d"", #10/1/" & current_year & "#, [STATIC_DATA_xls]![Fee Bandings Last Modified Date])/91) WHERE (([STATIC_DATA_xls]![Active]=0 And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA_xls]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#));"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q4 = IIf([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#, DateDiff(""d"", #10/1/" & current_year & "#, [STATIC_DATA]![Fee Bandings Last Modified Date])/91) WHERE (([STATIC_DATA]![Active]=0 And [STATIC_DATA]![Fee Bandings Last Modified Date]>=#10/1/" & current_year & "# And [STATIC_DATA]![Fee Bandings Last Modified Date]<=#12/31/" & current_year & "#));"
     DoCmd.RunSQL (sqlrun)
     
     
     ' Setting 6 decimal points on Active_Q# cols
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q1 = Round([STATIC_DATA_xls]![Active_Q1], 6)"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q1 = Round([STATIC_DATA]![Active_Q1], 6)"
     DoCmd.RunSQL (sqlrun)
     
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q2 = Round([STATIC_DATA_xls]![Active_Q2], 6)"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q2 = Round([STATIC_DATA]![Active_Q2], 6)"
     DoCmd.RunSQL (sqlrun)
     
-    sqlrun = "UPDATE STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q3 = Round([STATIC_DATA_xls]![Active_Q3], 6)"
+    sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.Active_Q3 = Round([STATIC_DATA]![Active_Q3], 6)"
     DoCmd.RunSQL (sqlrun)
     
-    sqlrun = "Update STATIC_DATA_xls SET STATIC_DATA_xls.Active_Q4 = Round([STATIC_DATA_xls]![Active_Q4], 6)"
+    sqlrun = "Update STATIC_DATA SET STATIC_DATA.Active_Q4 = Round([STATIC_DATA]![Active_Q4], 6)"
     DoCmd.RunSQL (sqlrun)
  
     

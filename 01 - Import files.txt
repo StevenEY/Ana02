@@ -30,7 +30,7 @@ Public Sub imp_data()
                 For i = 1 To AAA_AUM_Q1_Q2_Q3
 
                     DoCmd.TransferSpreadsheet acImport, _
-                        acSpreadsheetTypeExcel9, strFile, _
+                        acSpreadsheetTypeExcel9, "AAA_AUM_Q" & i, _
                         strPathFile, True, _
                         i & "Q2016" & "$A1:AD1000000"
             
@@ -38,27 +38,37 @@ Public Sub imp_data()
 
             ElseIf strFile = "STATIC_DATA.xls" Then
                 DoCmd.TransferSpreadsheet acImport, _
-                acSpreadsheetTypeExcel9, strFile, _
+                acSpreadsheetTypeExcel9, "STATIC_DATA", _
                 strPathFile, True, _
                 "$A2:AD65536"
                 
 ' ============ Below attempts to remove first row not working ============
 '                Dim SQL As String
-'                SQL = "DELETE FROM (SELECT TOP 2 * FROM STATIC_DATA_xls)"
+'                SQL = "DELETE FROM (SELECT TOP 2 * FROM STATIC_DATA)"
 '                DoCmd.RunSQL (SQL)
                 
-'                SQLrun = "delete top(1) from STATIC_DATA_xls"
+'                SQLrun = "delete top(1) from STATIC_DATA"
 '                DoCmd.RunSQL (SQLrun)
-            
-
-            Else: ' FEES_GENERATED_ANSWER_Q3.xlsx
+                 
+            ElseIf strFile = "FEES_GENERATED_ANSWER_Q1.xls" Then
                 DoCmd.TransferSpreadsheet acImport, _
-                    acSpreadsheetTypeExcel9, strFile, _
+                    acSpreadsheetTypeExcel9, "FEES_GENERATED_ANS_Q1", _
+                    strPathFile, True, _
+                    "$A1:AD65536"
+            
+            ElseIf strFile = "FEES_GENERATED_ANSWER_Q2.xls" Then
+                DoCmd.TransferSpreadsheet acImport, _
+                    acSpreadsheetTypeExcel9, "FEES_GENERATED_ANS_Q2", _
+                    strPathFile, True, _
+                    "$A1:AD65536"
+
+            ElseIf strFile = "FEES_GENERATED_ANSWER_Q3.xlsx" Then
+                DoCmd.TransferSpreadsheet acImport, _
+                    acSpreadsheetTypeExcel9, "FEES_GENERATED_ANS_Q3", _
                     strPathFile, True, _
                     "$A1:AD65536"
                 
 
-            
             End If
             strFile = Dir()
 

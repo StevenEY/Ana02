@@ -1,0 +1,116 @@
+Option Compare Database
+
+Sub populate_calculation()
+
+    ' ===== Populating Active_Q1-Q4 columns (in table: STATIC_DATA) with decimal figure representing how much of the quarter has been charged =====
+    ' ===== E.g. 1 = Whole quarter charged. 0 = Whole quarter not charged. 0.5 = half of quarter charged. =====
+    ' ===== Note: the calculation for 1Q16 and 2Q16 are different from the calculation for other quarters =====
+
+    DoCmd.SetWarnings False
+
+        Dim sqlrun As String
+        
+' ===================================================================
+' Q1
+    ' Root
+        ' Inserting root into root col:
+        sqlrun = "INSERT INTO CALCULATION_Q1 (Root) SELECT DISTINCT root FROM AAA_AUM_Q1;"
+        DoCmd.RunSQL (sqlrun)
+
+        ' Removing 'UK' from root number:
+        sqlrun = "UPDATE CALCULATION_Q1 SET Root = RIGHT(Root, 7);"
+        DoCmd.RunSQL (sqlrun)
+
+
+    ' Asset val
+
+        ' THE BELOW IS APPENDING INSTEAD OF UPDATING:
+        ' INSERT INTO CALCULATION_Q1 (Asset_value) SELECT SUM(value) FROM AAA_AUM_Q1 GROUP BY root;
+    
+        ' BELOW SEEMS TO BE SELECTING FINE:
+        ' SELECT CALCULATION_Q1.Asset_value, SUM(value) FROM AAA_AUM_Q1 GROUPBY Root;
+        
+        ' THE BELOW'S ALSO APPENDING:
+        '> INSERT INTO CALCULATION_Q1 (Asset_value) SELECT SUM(AAA_AUM_Q1.value) FROM AAA_AUM_Q1 GROUP BY AAA_AUM_Q1.root;
+    
+        ' THE BELOW HAS SYNTAX ERROR - Syntax error (missing operator in query expression 'SUM(AAA_AUM_Q1.value from AAA_AUM_Q1 GROUP BY CALCULATION_Q1.root
+        '>> UPDATE CALCULATION_Q1 SET CALCULATION_Q1.[Asset_value] = SUM(AAA_AUM_Q1.[value]) FROM AAA_AUM_Q1 GROUP BY CALCULATION_Q1.[root];
+
+
+    ' BPPA_SC/IM
+        ' Update BPPA_SC in Calc_Q1 - not working (using joins)
+        ' UPDATE FEES_GENERATED_ANS_Q1, AAA_AUM_Q1, CALCULATION_Q1 INNER JOIN STATIC_DATA ON CALCULATION_Q1.Root = STATIC_DATA.[Portfolio Code] SET CALCULATION_Q1.BPPA_SC = [STATIC_DATA].[BPPA];
+        ' UPDATE FEES_GENERATED_ANS_Q1, AAA_AUM_Q1, CALCULATION_Q1 INNER JOIN STATIC_DATA ON CALCULATION_Q1.Root = STATIC_DATA.[Portfolio Code] SET CALCULATION_Q1.BPPA_SC = [STATIC_DATA].[BPPA] WHERE [STATIC_DATA].[Charge Type]="Safe Custody Fee";
+        ' ^ Just hangs halfway
+
+
+
+        ' Converting AMOUNT column from negative to positive (applies only to 1&2Q16):
+        sqlrun = "UPDATE FEES_GENERATED_ANS_Q1 SET FEES_GENERATED_ANS_Q1.AMOUNT = Abs([FEES_GENERATED_ANS_Q1].[AMOUNT]);"
+        DoCmd.RunSQL (sqlrun)
+        
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+' ===================================================================
+' Q2
+    ' Root
+        ' Inserting root into root col:
+        sqlrun = "INSERT INTO CALCULATION_Q2 (Root) SELECT DISTINCT root FROM AAA_AUM_Q2;"
+        DoCmd.RunSQL (sqlrun)
+
+        ' Removing 'UK' from root number:
+        sqlrun = "UPDATE CALCULATION_Q2 SET Root = RIGHT(Root, 7);"
+        DoCmd.RunSQL (sqlrun)
+
+
+    ' Asset val
+
+
+    
+    
+    
+        ' Converting AMOUNT column from negative to positive (applies only to 1&2Q16):
+        sqlrun = "UPDATE FEES_GENERATED_ANS_Q2 SET FEES_GENERATED_ANS_Q2.AMOUNT = Abs([FEES_GENERATED_ANS_Q2].[AMOUNT]);"
+        DoCmd.RunSQL (sqlrun)
+
+
+
+
+
+
+
+
+' ===================================================================
+'Q3
+    ' Root
+        ' Inserting root into root col:
+        sqlrun = "INSERT INTO CALCULATION_Q3 (Root) SELECT DISTINCT root FROM AAA_AUM_Q3;"
+        DoCmd.RunSQL (sqlrun)
+
+        ' Removing 'UK' from root number:
+        sqlrun = "UPDATE CALCULATION_Q3 SET Root = RIGHT(Root, 7);"
+        DoCmd.RunSQL (sqlrun)
+
+
+    ' Asset val
+
+
+
+
+
+    DoCmd.SetWarnings True
+    
+End Sub
+

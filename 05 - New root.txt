@@ -1,0 +1,51 @@
+Option Compare Database
+
+' ===== In order to have consistent (7 digit, numbers-only) roots, creating new root col in AAA_AUM_Q# =====
+' ===== Also setting STATIC_DATA Portfolio Code (root) column to text to enable joins/comparisons -----
+
+Public Sub new_roots()
+
+    DoCmd.SetWarnings False
+    
+
+        Dim sqlrun As String
+        
+        
+        sqlrun = "ALTER TABLE AAA_AUM_Q1 ADD COLUMN New_root TEXT;" ' Needs to be text in order to keep leading 0s
+        DoCmd.RunSQL (sqlrun)
+
+        sqlrun = "UPDATE AAA_AUM_Q1 SET AAA_AUM_Q1.New_root = RIGHT(AAA_AUM_Q1.root, 7);"
+        DoCmd.RunSQL (sqlrun)
+
+
+        sqlrun = "ALTER TABLE AAA_AUM_Q2 ADD COLUMN New_root TEXT;" ' Needs to be text in order to keep leading 0s
+        DoCmd.RunSQL (sqlrun)
+
+        sqlrun = "UPDATE AAA_AUM_Q2 SET AAA_AUM_Q2.New_root = RIGHT(AAA_AUM_Q2.root, 7);"
+        DoCmd.RunSQL (sqlrun)
+
+
+        sqlrun = "ALTER TABLE AAA_AUM_Q3 ADD COLUMN New_root TEXT;" ' Needs to be text in order to keep leading 0s
+        DoCmd.RunSQL (sqlrun)
+
+        sqlrun = "UPDATE AAA_AUM_Q3 SET AAA_AUM_Q3.New_root = RIGHT(AAA_AUM_Q3.root, 7);"
+        DoCmd.RunSQL (sqlrun)
+        
+        
+         ' Commented the below as AAA_AUM_Q4 currently does not exist.
+'        sqlrun = "ALTER TABLE AAA_AUM_Q4 ADD COLUMN New_root TEXT;" ' Needs to be text in order to keep leading 0s
+'        DoCmd.RunSQL (sqlrun)
+'
+'        sqlrun = "UPDATE AAA_AUM_Q4 SET AAA_AUM_Q4.New_root = RIGHT(AAA_AUM_Q4.root, 7);"
+'        DoCmd.RunSQL (sqlrun)
+        
+                
+        ' Converting STATIC_DATA Portfolio Code (root) col to text:
+        sqlrun = "ALTER TABLE STATIC_DATA ALTER COLUMN [Portfolio Code] TEXT;"
+        DoCmd.RunSQL (sqlrun)
+        
+
+    DoCmd.SetWarnings True
+    
+End Sub
+
