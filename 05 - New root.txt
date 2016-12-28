@@ -1,7 +1,6 @@
 Option Compare Database
 
-' ===== In order to have consistent (7 digit, numbers-only) roots, creating new root col in AAA_AUM_Q# =====
-' ===== Also setting STATIC_DATA Portfolio Code (root) column to text to enable joins/comparisons -----
+' ===== In order to have consistent (7 digit, numbers-only) roots, creating New_root cols to better enable GROUP BY =====
 
 Public Sub new_roots()
 
@@ -10,7 +9,7 @@ Public Sub new_roots()
 
         Dim sqlrun As String
         
-        
+' AAA_AUM_Q#
         sqlrun = "ALTER TABLE AAA_AUM_Q1 ADD COLUMN New_root TEXT;" ' Needs to be text in order to keep leading 0s
         DoCmd.RunSQL (sqlrun)
 
@@ -30,20 +29,65 @@ Public Sub new_roots()
 
         sqlrun = "UPDATE AAA_AUM_Q3 SET AAA_AUM_Q3.New_root = RIGHT(AAA_AUM_Q3.root, 7);"
         DoCmd.RunSQL (sqlrun)
-        
-        
-         ' Commented the below as AAA_AUM_Q4 currently does not exist.
+
+
+         ' Commented the below as AAA_AUM_Q4 currently does not exist (not doing Q4 in 2016).
 '        sqlrun = "ALTER TABLE AAA_AUM_Q4 ADD COLUMN New_root TEXT;" ' Needs to be text in order to keep leading 0s
 '        DoCmd.RunSQL (sqlrun)
 '
 '        sqlrun = "UPDATE AAA_AUM_Q4 SET AAA_AUM_Q4.New_root = RIGHT(AAA_AUM_Q4.root, 7);"
 '        DoCmd.RunSQL (sqlrun)
-        
-                
-        ' Converting STATIC_DATA Portfolio Code (root) col to text:
+
+
+
+' STATIC_DATA
+        ' Converting STATIC_DATA Portfolio Code (root) col to text (may be redundant now since now using New_root):
         sqlrun = "ALTER TABLE STATIC_DATA ALTER COLUMN [Portfolio Code] TEXT;"
         DoCmd.RunSQL (sqlrun)
+
+
+        sqlrun = "ALTER TABLE STATIC_DATA ADD COLUMN New_root TEXT;"
+        DoCmd.RunSQL (sqlrun)
+
+        sqlrun = "UPDATE STATIC_DATA SET STATIC_DATA.New_root = [STATIC_DATA].[Portfolio Code]"
+        DoCmd.RunSQL (sqlrun)
+
+
+' FEES_GENERATED_ANS_Q#
+    ' Q1
+        sqlrun = "ALTER TABLE FEES_GENERATED_ANS_Q1 ADD COLUMN New_root TEXT;"
+        DoCmd.RunSQL (sqlrun)
         
+        sqlrun = "UPDATE FEES_GENERATED_ANS_Q1 SET FEES_GENERATED_ANS_Q1.New_root = FEES_GENERATED_ANS_Q1.MVRACI;"
+        DoCmd.RunSQL (sqlrun)
+
+
+    ' Q2
+        sqlrun = "ALTER TABLE FEES_GENERATED_ANS_Q2 ADD COLUMN New_root TEXT;"
+        DoCmd.RunSQL (sqlrun)
+        
+        sqlrun = "UPDATE FEES_GENERATED_ANS_Q2 SET FEES_GENERATED_ANS_Q2.New_root = FEES_GENERATED_ANS_Q2.MVRACI;"
+        DoCmd.RunSQL (sqlrun)
+        
+        
+    ' Q3
+        sqlrun = "ALTER TABLE FEES_GENERATED_ANS_Q3 ADD COLUMN New_root TEXT;"
+        DoCmd.RunSQL (sqlrun)
+        
+        sqlrun = "UPDATE FEES_GENERATED_ANS_Q3 SET FEES_GENERATED_ANS_Q3.New_root = FEES_GENERATED_ANS_Q3.MVRACI;"
+        DoCmd.RunSQL (sqlrun)
+
+    
+'    ' Q4
+'    ' Commented the below as FEES_GENERATED_ANS_Q4 currently does not exist (not doing Q4 in 2016).
+'        sqlrun = "ALTER TABLE FEES_GENERATED_ANS_Q4 ADD COLUMN New_root TEXT;"
+'        DoCmd.RunSQL (sqlrun)
+'
+'        sqlrun = "UPDATE FEES_GENERATED_ANS_Q4 SET FEES_GENERATED_ANS_Q4.New_root = FEES_GENERATED_ANS_Q4.MVRACI;"
+'        DoCmd.RunSQL (sqlrun)
+
+
+
 
     DoCmd.SetWarnings True
     
