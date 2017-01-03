@@ -74,7 +74,7 @@ Public Sub new_roots()
         sqlrun = "ALTER TABLE FEES_GENERATED_ANS_Q3 ADD COLUMN New_root TEXT;"
         DoCmd.RunSQL (sqlrun)
         
-        sqlrun = "UPDATE FEES_GENERATED_ANS_Q3 SET FEES_GENERATED_ANS_Q3.New_root = FEES_GENERATED_ANS_Q3.MVRACI;"
+        sqlrun = "UPDATE FEES_GENERATED_ANS_Q3 SET FEES_GENERATED_ANS_Q3.New_root = FEES_GENERATED_ANS_Q3.dr_root;"
         DoCmd.RunSQL (sqlrun)
 
     
@@ -85,6 +85,51 @@ Public Sub new_roots()
 '
 '        sqlrun = "UPDATE FEES_GENERATED_ANS_Q4 SET FEES_GENERATED_ANS_Q4.New_root = FEES_GENERATED_ANS_Q4.MVRACI;"
 '        DoCmd.RunSQL (sqlrun)
+
+
+
+
+'Charge_type in FEES_GENERATED_ANS_Q#
+'Adding charge_type (IM/IM_VAT/SC) col to fees_generated_ans_q# - Had issue updating Calculation_Q# directly using 'LIKE', so doing this as workaround
+        
+    'Q1
+        sqlrun = "ALTER TABLE FEES_GENERATED_ANS_Q1 ADD COLUMN Charge_type TEXT;"
+        DoCmd.RunSQL (sqlrun)
+    
+        ' 1Q&2Q16 narrative col doesn't differentiate IM_fee and IM_VAT_fee (thus placing "IM_fee_or_IM_VAT_fee")
+        sqlrun = "UPDATE FEES_GENERATED_ANS_Q1 SET FEES_GENERATED_ANS_Q1.Charge_type = ""IM_fee_or_IM_VAT_fee"" WHERE (([FEES_GENERATED_ANS_Q1].[NARRATIVE] Like ""*IM*""));"
+        DoCmd.RunSQL (sqlrun)
+
+        sqlrun = "UPDATE FEES_GENERATED_ANS_Q1 SET FEES_GENERATED_ANS_Q1.Charge_type = ""SC_fee"" WHERE (([FEES_GENERATED_ANS_Q1].[NARRATIVE] Like ""*Safe Custody Fee*""));"
+        DoCmd.RunSQL (sqlrun)
+    
+    'Q2
+        'Adding charge_type (IM/IM_VAT/SC) col to fees_generated_ans_q# - Had issue updating Calculation_Q# directly using 'LIKE', so doing this as workaround
+        sqlrun = "ALTER TABLE FEES_GENERATED_ANS_Q2 ADD COLUMN Charge_type TEXT;"
+        DoCmd.RunSQL (sqlrun)
+    
+        ' 1Q&2Q16 narrative col doesn't differentiate IM_fee and IM_VAT_fee (thus placing "IM_fee_or_IM_VAT_fee")
+        sqlrun = "UPDATE FEES_GENERATED_ANS_Q2 SET FEES_GENERATED_ANS_Q2.Charge_type = ""IM_fee_or_IM_VAT_fee"" WHERE (([FEES_GENERATED_ANS_Q2].[NARRATIVE] Like ""*IM*""));"
+        DoCmd.RunSQL (sqlrun)
+
+        sqlrun = "UPDATE FEES_GENERATED_ANS_Q2 SET FEES_GENERATED_ANS_Q2.Charge_type = ""SC_fee"" WHERE (([FEES_GENERATED_ANS_Q2].[NARRATIVE] Like ""*Safe Custody Fee*""));"
+        DoCmd.RunSQL (sqlrun)
+    
+    'Q3
+        'Adding charge_type (IM/IM_VAT/SC) col to fees_generated_ans_q# - Had issue updating Calculation_Q# directly using 'LIKE', so doing this as workaround
+        sqlrun = "ALTER TABLE FEES_GENERATED_ANS_Q3 ADD COLUMN Charge_type TEXT;"
+        DoCmd.RunSQL (sqlrun)
+    
+        sqlrun = "UPDATE FEES_GENERATED_ANS_Q3 SET FEES_GENERATED_ANS_Q3.Charge_type = ""IM_fee"" WHERE (([FEES_GENERATED_ANS_Q3].[dr_comment] Like ""IM Fee*""));"
+        DoCmd.RunSQL (sqlrun)
+        
+        sqlrun = "UPDATE FEES_GENERATED_ANS_Q3 SET FEES_GENERATED_ANS_Q3.Charge_type = ""IM_VAT_fee"" WHERE (([FEES_GENERATED_ANS_Q3].[dr_comment] Like ""VAT IM Fee*""));"
+        DoCmd.RunSQL (sqlrun)
+
+        sqlrun = "UPDATE FEES_GENERATED_ANS_Q3 SET FEES_GENERATED_ANS_Q3.Charge_type = ""SC_fee"" WHERE (([FEES_GENERATED_ANS_Q3].[dr_comment] Like ""*Safe Custody Fee*""));"
+        DoCmd.RunSQL (sqlrun)
+        
+
 
 
 

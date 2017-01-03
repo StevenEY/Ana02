@@ -11,14 +11,14 @@ Public Sub fix_format()
     DoCmd.SetWarnings False
     
     
-    CurrentDb.Execute "ALTER TABLE STATIC_DATA ADD COLUMN FEE_BAND_MOD_DATE_tmp text", dbFailOnError
-    sqlrun = "UPDATE STATIC_DATA AS D SET D.FEE_BAND_MOD_DATE_tmp = Left(D.[Fee Bandings Last Modified Date],2) & ""/"" & Mid(D.[Fee Bandings Last Modified Date],4,2) & ""/"" & Right(D.[Fee Bandings Last Modified Date],2);"
+    CurrentDb.Execute "ALTER TABLE STATIC_DATA_xls ADD COLUMN FEE_BAND_MOD_DATE_tmp text", dbFailOnError
+    sqlrun = "UPDATE STATIC_DATA_xls AS D SET D.FEE_BAND_MOD_DATE_tmp = Left(D.[Fee Bandings Last Modified Date],2) & ""/"" & Mid(D.[Fee Bandings Last Modified Date],4,2) & ""/"" & Right(D.[Fee Bandings Last Modified Date],2);"
     DoCmd.RunSQL (sqlrun)
-    CurrentDb.Execute "ALTER TABLE STATIC_DATA DROP COLUMN [Fee Bandings Last Modified Date]"
-    CurrentDb.Execute "ALTER TABLE STATIC_DATA ADD COLUMN [Fee Bandings Last Modified Date] datetime", dbFailOnError
-    sqlrun = "UPDATE STATIC_DATA AS D SET D.[Fee Bandings Last Modified Date] = D.FEE_BAND_MOD_DATE_tmp;"
+    CurrentDb.Execute "ALTER TABLE STATIC_DATA_xls DROP COLUMN [Fee Bandings Last Modified Date]"
+    CurrentDb.Execute "ALTER TABLE STATIC_DATA_xls ADD COLUMN [Fee Bandings Last Modified Date] datetime", dbFailOnError
+    sqlrun = "UPDATE STATIC_DATA_xls AS D SET D.[Fee Bandings Last Modified Date] = D.FEE_BAND_MOD_DATE_tmp;"
     DoCmd.RunSQL (sqlrun)
-    CurrentDb.Execute "ALTER TABLE STATIC_DATA DROP COLUMN FEE_BAND_MOD_DATE_tmp"
+    CurrentDb.Execute "ALTER TABLE STATIC_DATA_xls DROP COLUMN FEE_BAND_MOD_DATE_tmp"
 
 
     DoCmd.SetWarnings True

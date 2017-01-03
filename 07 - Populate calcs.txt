@@ -5,56 +5,139 @@ Sub populate_calculation()
     ' ===== Populating Active_Q1-Q4 columns (in table: STATIC_DATA) with decimal figure representing how much of the quarter has been charged =====
     ' ===== E.g. 1 = Whole quarter charged. 0 = Whole quarter not charged. 0.5 = half of quarter charged. =====
     ' ===== Note: the calculation for 1Q16 and 2Q16 are different from the calculation for other quarters =====
-
+    ' Note: 2016 is leap year, therefore some claculations use 366 days
+    ' Note: 'Total fee' figure should be slightly smaller than 'Actual total fee' as it excludes other minor fees
+    
     DoCmd.SetWarnings False
 
         Dim sqlrun As String
         
 ' ===================================================================
-
+        
 'Q1
+        'Converting AMOUNT column from negative to positive (applies only to 1&2Q16):
+        sqlrun = "UPDATE FEES_GENERATED_ANS_Q1 SET FEES_GENERATED_ANS_Q1.AMOUNT = Abs([FEES_GENERATED_ANS_Q1].[AMOUNT]);"
+        DoCmd.RunSQL (sqlrun)
+
     'New_root
         ' Inserting root into New_root col:
         sqlrun = "INSERT INTO CALCULATION_Q1 (New_root) SELECT DISTINCT New_root FROM AAA_AUM_Q1;"
         DoCmd.RunSQL (sqlrun)
 
     'Asset value
-        ' Creating temporary table
-        sqlrun = "SELECT AAA_AUM_Q1.New_root, Sum(AAA_AUM_Q1.value) AS Sum_of_value INTO tmp_VALUE_SUM_Q1 FROM AAA_AUM_Q1 GROUP BY AAA_AUM_Q1.New_root;"
+        ' Creating temporary table - Calculating quarter AUM figure (which is why '/ 4')
+        sqlrun = "SELECT AAA_AUM_Q1.New_root, Sum(AAA_AUM_Q1.value) / 4 AS Sum_of_value INTO tmp_VALUE_SUM_Q1 FROM AAA_AUM_Q1 GROUP BY AAA_AUM_Q1.New_root;"
         DoCmd.RunSQL (sqlrun)
         
         ' Placing contents of temporary table onto Calculation table
         sqlrun = "UPDATE tmp_VALUE_SUM_Q1 INNER JOIN CALCULATION_Q1 ON tmp_VALUE_SUM_Q1.New_root = CALCULATION_Q1.New_root SET CALCULATION_Q1.Asset_value = [tmp_VALUE_SUM_Q1]![Sum_of_value];"
         DoCmd.RunSQL (sqlrun)
         
+        ' Deleting temporary table
+        DoCmd.DeleteObject acTable, "tmp_VALUE_SUM_Q1"
+        
     'Asset val excl cash
-        ' Creating temporary table
-        sqlrun = "SELECT AAA_AUM_Q1.New_root, Sum(AAA_AUM_Q1.value) AS Sum_of_val_excl_cash INTO tmp_VAL_SUM_EXCL_CASH_Q1 FROM AAA_AUM_Q1 WHERE (((AAA_AUM_Q1.category1) <> ""CASH"")) GROUP BY AAA_AUM_Q1.New_root;"
+        ' Creating temporary table - Calculating quarter AUM figure (which is why '/ 4')
+        sqlrun = "SELECT AAA_AUM_Q1.New_root, Sum(AAA_AUM_Q1.value) / 4 AS Sum_of_val_excl_cash INTO tmp_VAL_SUM_EXCL_CASH_Q1 FROM AAA_AUM_Q1 WHERE (((AAA_AUM_Q1.category1) <> ""CASH"")) GROUP BY AAA_AUM_Q1.New_root;"
         DoCmd.RunSQL (sqlrun)
         
         ' Placing contents of temporary table onto Calculation table
         sqlrun = "UPDATE tmp_VAL_SUM_EXCL_CASH_Q1 INNER JOIN CALCULATION_Q1 ON tmp_VAL_SUM_EXCL_CASH_Q1.New_root = CALCULATION_Q1.New_root SET CALCULATION_Q1.Ass_val_excl_cash = [tmp_VAL_SUM_EXCL_CASH_Q1]![Sum_of_val_excl_cash];"
         DoCmd.RunSQL (sqlrun)
+        
+        ' Deleting temporary table
+        DoCmd.DeleteObject acTable, "tmp_VAL_SUM_EXCL_CASH_Q1"
 
-
-
-
-
-
-
-
-
-    'BPPA_SC/IM
-        ' Update BPPA_SC in Calc_Q1 - not working (using joins)
-        ' UPDATE FEES_GENERATED_ANS_Q1, AAA_AUM_Q1, CALCULATION_Q1 INNER JOIN STATIC_DATA ON CALCULATION_Q1.Root = STATIC_DATA.[Portfolio Code] SET CALCULATION_Q1.BPPA_SC = [STATIC_DATA].[BPPA];
-        ' UPDATE FEES_GENERATED_ANS_Q1, AAA_AUM_Q1, CALCULATION_Q1 INNER JOIN STATIC_DATA ON CALCULATION_Q1.Root = STATIC_DATA.[Portfolio Code] SET CALCULATION_Q1.BPPA_SC = [STATIC_DATA].[BPPA] WHERE [STATIC_DATA].[Charge Type]="Safe Custody Fee";
-        ' ^ Just hangs halfway
-
-
-
-        'Converting AMOUNT column from negative to positive (applies only to 1&2Q16):
-        sqlrun = "UPDATE FEES_GENERATED_ANS_Q1 SET FEES_GENERATED_ANS_Q1.AMOUNT = Abs([FEES_GENERATED_ANS_Q1].[AMOUNT]);"
+    'BPPA_IM
+        ' Creating temporary table
+        sqlrun = "SELECT STATIC_DATA.New_root, STATIC_DATA.[Charge Type] AS Charge_type, STATIC_DATA.BPPA INTO tmp_CHARGE_TYPE_IM_Q1 FROM STATIC_DATA INNER JOIN CALCULATION_Q1 ON STATIC_DATA.New_root = CALCULATION_Q1.New_root WHERE (((STATIC_DATA.[Charge Type])=""IM Fee"") AND ((CALCULATION_Q1.Ass_val_excl_cash) Between [STATIC_DATA].[Min Value] And [STATIC_DATA].[Max Value])) GROUP BY STATIC_DATA.New_root, STATIC_DATA.[Charge Type], STATIC_DATA.BPPA;"
         DoCmd.RunSQL (sqlrun)
+        
+        ' Placing contents of temporary table onto Calculation table
+        sqlrun = "UPDATE CALCULATION_Q1 INNER JOIN tmp_CHARGE_TYPE_IM_Q1 ON CALCULATION_Q1.New_root = tmp_CHARGE_TYPE_IM_Q1.New_root SET CALCULATION_Q1.BPPA_IM = [tmp_CHARGE_TYPE_IM_Q1].[BPPA];"
+        DoCmd.RunSQL (sqlrun)
+        
+        'Deleting temporary table
+        DoCmd.DeleteObject acTable, "tmp_CHARGE_TYPE_IM_Q1"
+    
+    'BPPA_SC
+        ' Creating temporary table
+        sqlrun = "SELECT STATIC_DATA.New_root, STATIC_DATA.[Charge Type] AS Charge_type, STATIC_DATA.BPPA INTO tmp_CHARGE_TYPE_SC_Q1 FROM STATIC_DATA WHERE (((STATIC_DATA.[Charge Type]) = ""Safe Custody Fee"")) GROUP BY STATIC_DATA.New_root, STATIC_DATA.[Charge Type], STATIC_DATA.BPPA;"
+        DoCmd.RunSQL (sqlrun)
+        
+        ' Placing contents of temporary table onto Calculation table
+        sqlrun = "UPDATE CALCULATION_Q1 INNER JOIN tmp_CHARGE_TYPE_SC_Q1 ON CALCULATION_Q1.New_root = tmp_CHARGE_TYPE_SC_Q1.New_root SET CALCULATION_Q1.BPPA_SC = [tmp_CHARGE_TYPE_SC_Q1].[BPPA];"
+        DoCmd.RunSQL (sqlrun)
+        
+        ' Deleting temporary table
+        DoCmd.DeleteObject acTable, "tmp_CHARGE_TYPE_SC_Q1"
+
+    'IM_FEE
+        ' Calculation: Asset_value * BPPA_IM / 100 / 100
+        sqlrun = "UPDATE CALCULATION_Q1, FEES_GENERATED_ANS_Q1 SET CALCULATION_Q1.IM_FEE = [CALCULATION_Q1].[Asset_value]*[CALCULATION_Q1].[BPPA_IM] / 100 / 100;"
+        DoCmd.RunSQL (sqlrun)
+        
+        ' Setting all nulls to 0 (for total calculations)
+        sqlrun = "UPDATE CALCULATION_Q1 SET CALCULATION_Q1.IM_FEE = 0 WHERE (((CALCULATION_Q1.[IM_FEE]) Is Null));"
+        DoCmd.RunSQL (sqlrun)
+    
+    'IM_VAT_FEE
+        ' Calculation: Asset_value * BPPA_IM / 100 / 100 / 5
+        sqlrun = "UPDATE CALCULATION_Q1, FEES_GENERATED_ANS_Q1 SET CALCULATION_Q1.IM_VAT_FEE = [CALCULATION_Q1].[Asset_value]*[CALCULATION_Q1].[BPPA_IM] / 100 / 100 / 5;"
+        DoCmd.RunSQL (sqlrun)
+        
+        ' Setting all nulls to 0 (for total calculations)
+        sqlrun = "UPDATE CALCULATION_Q1 SET CALCULATION_Q1.IM_VAT_FEE = 0 WHERE (((CALCULATION_Q1.[IM_VAT_FEE]) Is Null));"
+        DoCmd.RunSQL (sqlrun)
+
+    'SC_FEE
+        ' Calculation: Asset_value * BPPA_SC / 100 / 100
+        sqlrun = "UPDATE CALCULATION_Q1, FEES_GENERATED_ANS_Q1 SET CALCULATION_Q1.SC_FEE = [CALCULATION_Q1].[Ass_val_excl_cash]*[CALCULATION_Q1].[BPPA_SC] / 100 / 100;"
+        DoCmd.RunSQL (sqlrun)
+        
+        ' Setting all nulls to 0 (for total calculations)
+        sqlrun = "UPDATE CALCULATION_Q1 SET CALCULATION_Q1.SC_FEE = 0 WHERE (((CALCULATION_Q1.[SC_FEE]) Is Null));"
+        DoCmd.RunSQL (sqlrun)
+    
+    'Total_fee
+        ' Calculation: IM_fee + IM_VAT_fee + SC_fee
+        sqlrun = "UPDATE CALCULATION_Q1 SET CALCULATION_Q1.TOTAL_FEE = [CALCULATION_Q1].[IM_FEE]+[CALCULATION_Q1].[IM_VAT_FEE]+[CALCULATION_Q1].[SC_Fee];"
+        DoCmd.RunSQL (sqlrun)
+
+
+
+
+   
+
+    'Wrapped_unwrapped
+        ' Placing whether wrapped or unwrapped from FEES_GENERATED_ANS_Q#.DR_RTGDES. Wrapped/unwrapper/some cases other
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    'Total_total_fee
+    '    sqlrun = "UPDATE CALCULATION_Q1 INNER JOIN FEES_GENERATED_ANS_Q1 ON CALCULATION_Q1.New_root = FEES_GENERATED_ANS_Q1.New_root SET CALCULATION_Q1.IM_FEE = [FEES_GENERATED_ANS_Q1].[AMOUNT];"
+    '    DoCmd.RunSQL (sqlrun)
+        
+
+
+
+
+
+
+
+
+        
 
 
 
@@ -73,40 +156,115 @@ Sub populate_calculation()
 ' ===================================================================
 
 'Q2
+        ' Converting AMOUNT column from negative to positive (applies only to 1&2Q16):
+        sqlrun = "UPDATE FEES_GENERATED_ANS_Q2 SET FEES_GENERATED_ANS_Q2.AMOUNT = Abs([FEES_GENERATED_ANS_Q2].[AMOUNT]);"
+        DoCmd.RunSQL (sqlrun)
+                
+
     'New_root
         ' Inserting root into New_root col:
         sqlrun = "INSERT INTO CALCULATION_Q2 (New_root) SELECT DISTINCT New_root FROM AAA_AUM_Q2;"
         DoCmd.RunSQL (sqlrun)
 
     'Asset_value
-        ' Creating temporary table
-        sqlrun = "SELECT AAA_AUM_Q2.New_root, Sum(AAA_AUM_Q2.value) AS Sum_of_value INTO tmp_VALUE_SUM_Q2 FROM AAA_AUM_Q2 GROUP BY AAA_AUM_Q2.New_root;"
+        ' Creating temporary table - Calculating quarter AUM figure (which is why '/ 4')
+        sqlrun = "SELECT AAA_AUM_Q2.New_root, Sum(AAA_AUM_Q2.value) / 4 AS Sum_of_value INTO tmp_VALUE_SUM_Q2 FROM AAA_AUM_Q2 GROUP BY AAA_AUM_Q2.New_root;"
         DoCmd.RunSQL (sqlrun)
 
         ' Placing contents of temporary table onto Calculation table
         sqlrun = "UPDATE tmp_VALUE_SUM_Q2 INNER JOIN CALCULATION_Q2 ON tmp_VALUE_SUM_Q2.New_root = CALCULATION_Q2.New_root SET CALCULATION_Q2.Asset_value = [tmp_VALUE_SUM_Q2]![Sum_of_value];"
         DoCmd.RunSQL (sqlrun)
+        
+        ' Deleting temporary table
+        DoCmd.DeleteObject acTable, "tmp_VALUE_SUM_Q2"
 
     'Asset_val_excl_cash
-        ' Creating temporary table
-        sqlrun = "SELECT AAA_AUM_Q2.New_root, Sum(AAA_AUM_Q2.value) AS Sum_of_val_excl_cash INTO tmp_VAL_SUM_EXCL_CASH_Q2 FROM AAA_AUM_Q2 WHERE (((AAA_AUM_Q2.category1) <> ""CASH"")) GROUP BY AAA_AUM_Q2.New_root;"
+        ' Creating temporary table - Calculating quarter AUM figure (which is why '/ 4')
+        sqlrun = "SELECT AAA_AUM_Q2.New_root, Sum(AAA_AUM_Q2.value) / 4 AS Sum_of_val_excl_cash INTO tmp_VAL_SUM_EXCL_CASH_Q2 FROM AAA_AUM_Q2 WHERE (((AAA_AUM_Q2.category1) <> ""CASH"")) GROUP BY AAA_AUM_Q2.New_root;"
         DoCmd.RunSQL (sqlrun)
 
         ' Placing contents of temporary table onto Calculation table
         sqlrun = "UPDATE tmp_VAL_SUM_EXCL_CASH_Q2 INNER JOIN CALCULATION_Q2 ON tmp_VAL_SUM_EXCL_CASH_Q2.New_root = CALCULATION_Q2.New_root SET CALCULATION_Q2.Ass_val_excl_cash = [tmp_VAL_SUM_EXCL_CASH_Q2]![Sum_of_val_excl_cash];"
         DoCmd.RunSQL (sqlrun)
 
+        ' Deleting temporary table
+        DoCmd.DeleteObject acTable, "tmp_VAL_SUM_EXCL_CASH_Q2"
 
+    'BPPA_IM
+        ' Creating temporary table
+        sqlrun = "SELECT STATIC_DATA.New_root, STATIC_DATA.[Charge Type] AS Charge_type, STATIC_DATA.BPPA INTO tmp_CHARGE_TYPE_IM_Q2 FROM STATIC_DATA INNER JOIN CALCULATION_Q2 ON STATIC_DATA.New_root = CALCULATION_Q2.New_root WHERE (((STATIC_DATA.[Charge Type])=""IM Fee"") AND ((CALCULATION_Q2.Ass_val_excl_cash) Between [STATIC_DATA].[Min Value] And [STATIC_DATA].[Max Value])) GROUP BY STATIC_DATA.New_root, STATIC_DATA.[Charge Type], STATIC_DATA.BPPA;"
+        DoCmd.RunSQL (sqlrun)
+        
+        ' Placing contents of temporary table onto Calculation table
+        sqlrun = "UPDATE CALCULATION_Q2 INNER JOIN tmp_CHARGE_TYPE_IM_Q2 ON CALCULATION_Q2.New_root = tmp_CHARGE_TYPE_IM_Q2.New_root SET CALCULATION_Q2.BPPA_IM = [tmp_CHARGE_TYPE_IM_Q2].[BPPA];"
+        DoCmd.RunSQL (sqlrun)
+        
+        'Deleting temporary table
+        DoCmd.DeleteObject acTable, "tmp_CHARGE_TYPE_IM_Q2"
+    
+    'BPPA_SC
+        ' Creating temporary table
+        sqlrun = "SELECT STATIC_DATA.New_root, STATIC_DATA.[Charge Type] AS Charge_type, STATIC_DATA.BPPA INTO tmp_CHARGE_TYPE_SC_Q2 FROM STATIC_DATA WHERE (((STATIC_DATA.[Charge Type]) = ""Safe Custody Fee"")) GROUP BY STATIC_DATA.New_root, STATIC_DATA.[Charge Type], STATIC_DATA.BPPA;"
+        DoCmd.RunSQL (sqlrun)
+        
+        ' Placing contents of temporary table onto Calculation table
+        sqlrun = "UPDATE CALCULATION_Q2 INNER JOIN tmp_CHARGE_TYPE_SC_Q2 ON CALCULATION_Q2.New_root = tmp_CHARGE_TYPE_SC_Q2.New_root SET CALCULATION_Q2.BPPA_SC = [tmp_CHARGE_TYPE_SC_Q2].[BPPA];"
+        DoCmd.RunSQL (sqlrun)
+        
+        ' Deleting temporary table
+        DoCmd.DeleteObject acTable, "tmp_CHARGE_TYPE_SC_Q2"
 
-
-
-
-
-
-        ' Converting AMOUNT column from negative to positive (applies only to 1&2Q16):
-        sqlrun = "UPDATE FEES_GENERATED_ANS_Q2 SET FEES_GENERATED_ANS_Q2.AMOUNT = Abs([FEES_GENERATED_ANS_Q2].[AMOUNT]);"
+    'IM_FEE
+        ' Calculation: Asset_value * BPPA_IM / 100 / 100
+        sqlrun = "UPDATE CALCULATION_Q2, FEES_GENERATED_ANS_Q2 SET CALCULATION_Q2.IM_FEE = [CALCULATION_Q2].[Asset_value]*[CALCULATION_Q2].[BPPA_IM] / 100 / 100;"
+        DoCmd.RunSQL (sqlrun)
+        
+        'Setting all nulls to 0 (for total calculations)
+        sqlrun = "UPDATE CALCULATION_Q2 SET CALCULATION_Q2.IM_FEE = 0 WHERE (((CALCULATION_Q2.[IM_FEE]) Is Null));"
         DoCmd.RunSQL (sqlrun)
 
+    'IM_VAT_FEE
+        ' Calculation: Asset_value * BPPA_IM / 100 / 100 / 5
+        sqlrun = "UPDATE CALCULATION_Q2, FEES_GENERATED_ANS_Q2 SET CALCULATION_Q2.IM_VAT_FEE = [CALCULATION_Q2].[Asset_value]*[CALCULATION_Q2].[BPPA_IM] / 100 / 100 / 5;"
+        DoCmd.RunSQL (sqlrun)
+        
+        ' Setting all nulls to 0 (for total calculations)
+        sqlrun = "UPDATE CALCULATION_Q2 SET CALCULATION_Q2.IM_VAT_FEE = 0 WHERE (((CALCULATION_Q2.[IM_VAT_FEE]) Is Null));"
+        DoCmd.RunSQL (sqlrun)
+    
+    'SC_FEE
+        ' Calculation: Asset_value * BPPA_SC / 100 / 100
+        sqlrun = "UPDATE CALCULATION_Q2, FEES_GENERATED_ANS_Q2 SET CALCULATION_Q2.SC_FEE = [CALCULATION_Q2].[Ass_val_excl_cash]*[CALCULATION_Q2].[BPPA_SC] / 100 / 100;"
+        DoCmd.RunSQL (sqlrun)
+        
+        'Setting all nulls to 0 (for total calculations)
+        sqlrun = "UPDATE CALCULATION_Q2 SET CALCULATION_Q2.SC_FEE = 0 WHERE (((CALCULATION_Q2.[SC_FEE]) Is Null));"
+        DoCmd.RunSQL (sqlrun)
+     
+    'Total_fee
+        ' Calculation: IM_fee + IM_VAT_fee + SC_fee
+        sqlrun = "UPDATE CALCULATION_Q2 SET CALCULATION_Q2.TOTAL_FEE = [CALCULATION_Q2].[IM_FEE]+[CALCULATION_Q2].[IM_VAT_FEE]+[CALCULATION_Q2].[SC_Fee];"
+        DoCmd.RunSQL (sqlrun)
+    
+
+
+
+
+
+
+    'Actual_total_fee
+    '    sqlrun = "UPDATE CALCULATION_Q2 INNER JOIN FEES_GENERATED_ANS_Q2 ON CALCULATION_Q2.New_root = FEES_GENERATED_ANS_Q2.New_root SET CALCULATION_Q2.IM_FEE = [FEES_GENERATED_ANS_Q2].[AMOUNT];"
+    '    DoCmd.RunSQL (sqlrun)
+        
+
+
+
+
+
+
+
+
+        
 
 
 
@@ -117,28 +275,141 @@ Sub populate_calculation()
 ' ===================================================================
 
 'Q3
+    
     'New_root
         ' Inserting root into New_root col:
         sqlrun = "INSERT INTO CALCULATION_Q3 (New_root) SELECT DISTINCT New_root FROM AAA_AUM_Q3;"
         DoCmd.RunSQL (sqlrun)
 
     'Asset value
-        ' Creating temporary table
-        sqlrun = "SELECT AAA_AUM_Q3.New_root, Sum(AAA_AUM_Q3.value) AS Sum_of_value INTO tmp_VALUE_SUM_Q3 FROM AAA_AUM_Q3 GROUP BY AAA_AUM_Q3.New_root;"
+        ' Creating temporary table - Calculating AUM figure (which is why '/ 366')
+        sqlrun = "SELECT AAA_AUM_Q3.New_root, Sum(AAA_AUM_Q3.value) / 366 AS Sum_of_value INTO tmp_VALUE_SUM_Q3 FROM AAA_AUM_Q3 GROUP BY AAA_AUM_Q3.New_root;"
         DoCmd.RunSQL (sqlrun)
         
         ' Placing contents of temporary table onto Calculation table
         sqlrun = "UPDATE tmp_VALUE_SUM_Q3 INNER JOIN CALCULATION_Q3 ON tmp_VALUE_SUM_Q3.New_root = CALCULATION_Q3.New_root SET CALCULATION_Q3.Asset_value = [tmp_VALUE_SUM_Q3]![Sum_of_value];"
         DoCmd.RunSQL (sqlrun)
         
+        ' Deleting temporary table
+        DoCmd.DeleteObject acTable, "tmp_VALUE_SUM_Q3"
+        
     'Asset val excl cash
-        ' Creating temporary table
-        sqlrun = "SELECT AAA_AUM_Q3.New_root, Sum(AAA_AUM_Q3.value) AS Sum_of_val_excl_cash INTO tmp_VAL_SUM_EXCL_CASH_Q3 FROM AAA_AUM_Q3 WHERE (((AAA_AUM_Q3.category1) <> ""CASH"")) GROUP BY AAA_AUM_Q3.New_root;"
+        ' Creating temporary table - Calculating AUM figure (which is why '/ 366' - 2016 is leap year)
+        sqlrun = "SELECT AAA_AUM_Q3.New_root, Sum(AAA_AUM_Q3.value) / 366 AS Sum_of_val_excl_cash INTO tmp_VAL_SUM_EXCL_CASH_Q3 FROM AAA_AUM_Q3 WHERE (((AAA_AUM_Q3.category1) <> ""CASH"")) GROUP BY AAA_AUM_Q3.New_root;"
         DoCmd.RunSQL (sqlrun)
         
         ' Placing contents of temporary table onto Calculation table
         sqlrun = "UPDATE tmp_VAL_SUM_EXCL_CASH_Q3 INNER JOIN CALCULATION_Q3 ON tmp_VAL_SUM_EXCL_CASH_Q3.New_root = CALCULATION_Q3.New_root SET CALCULATION_Q3.Ass_val_excl_cash = [tmp_VAL_SUM_EXCL_CASH_Q3]![Sum_of_val_excl_cash];"
         DoCmd.RunSQL (sqlrun)
+
+        ' Deleting temporary table
+        DoCmd.DeleteObject acTable, "tmp_VAL_SUM_EXCL_CASH_Q3"
+
+    'BPPA_IM
+        ' Creating temporary table
+        sqlrun = "SELECT STATIC_DATA.New_root, STATIC_DATA.[Charge Type] AS Charge_type, STATIC_DATA.BPPA INTO tmp_CHARGE_TYPE_IM_Q3 FROM STATIC_DATA INNER JOIN CALCULATION_Q3 ON STATIC_DATA.New_root = CALCULATION_Q3.New_root WHERE (((STATIC_DATA.[Charge Type])=""IM Fee"") AND ((CALCULATION_Q3.Ass_val_excl_cash) Between [STATIC_DATA].[Min Value] And [STATIC_DATA].[Max Value])) GROUP BY STATIC_DATA.New_root, STATIC_DATA.[Charge Type], STATIC_DATA.BPPA;"
+        DoCmd.RunSQL (sqlrun)
+        
+        ' Placing contents of temporary table onto Calculation table
+        sqlrun = "UPDATE CALCULATION_Q3 INNER JOIN tmp_CHARGE_TYPE_IM_Q3 ON CALCULATION_Q3.New_root = tmp_CHARGE_TYPE_IM_Q3.New_root SET CALCULATION_Q3.BPPA_IM = [tmp_CHARGE_TYPE_IM_Q3].[BPPA];"
+        DoCmd.RunSQL (sqlrun)
+        
+        'Deleting temporary table
+        DoCmd.DeleteObject acTable, "tmp_CHARGE_TYPE_IM_Q3"
+    
+    'BPPA_SC
+        ' Creating temporary table
+        sqlrun = "SELECT STATIC_DATA.New_root, STATIC_DATA.[Charge Type] AS Charge_type, STATIC_DATA.BPPA INTO tmp_CHARGE_TYPE_SC_Q3 FROM STATIC_DATA WHERE (((STATIC_DATA.[Charge Type]) = ""Safe Custody Fee"")) GROUP BY STATIC_DATA.New_root, STATIC_DATA.[Charge Type], STATIC_DATA.BPPA;"
+        DoCmd.RunSQL (sqlrun)
+        
+        ' Placing contents of temporary table onto Calculation table
+        sqlrun = "UPDATE CALCULATION_Q3 INNER JOIN tmp_CHARGE_TYPE_SC_Q3 ON CALCULATION_Q3.New_root = tmp_CHARGE_TYPE_SC_Q3.New_root SET CALCULATION_Q3.BPPA_SC = [tmp_CHARGE_TYPE_SC_Q3].[BPPA];"
+        DoCmd.RunSQL (sqlrun)
+        
+        ' Deleting temporary table
+        DoCmd.DeleteObject acTable, "tmp_CHARGE_TYPE_SC_Q3"
+
+    'IM_FEE
+        ' Calculation: Asset_value * BPPA_IM / 100 / 100
+        sqlrun = "UPDATE CALCULATION_Q3, FEES_GENERATED_ANS_Q3 SET CALCULATION_Q3.IM_FEE = [CALCULATION_Q3].[Asset_value]*[CALCULATION_Q3].[BPPA_IM] / 100 / 100;"
+        DoCmd.RunSQL (sqlrun)
+        
+        'Setting all nulls to 0 (for total calculations)
+        sqlrun = "UPDATE CALCULATION_Q3 SET CALCULATION_Q3.IM_FEE = 0 WHERE (((CALCULATION_Q3.[IM_FEE]) Is Null));"
+        DoCmd.RunSQL (sqlrun)
+
+    'IM_VAT_FEE
+        ' Calculation: Asset_value * BPPA_IM / 100 / 100 / 5
+        sqlrun = "UPDATE CALCULATION_Q3, FEES_GENERATED_ANS_Q3 SET CALCULATION_Q3.IM_VAT_FEE = [CALCULATION_Q3].[Asset_value]*[CALCULATION_Q3].[BPPA_IM] / 100 / 100 / 5;"
+        DoCmd.RunSQL (sqlrun)
+        
+        'Setting all nulls to 0 (for total calculations)
+        sqlrun = "UPDATE CALCULATION_Q3 SET CALCULATION_Q3.IM_VAT_FEE = 0 WHERE (((CALCULATION_Q3.[IM_VAT_FEE]) Is Null));"
+        DoCmd.RunSQL (sqlrun)
+
+    'SC_FEE
+        ' Calculation: Asset_value * BPPA_SC / 100 / 100
+        sqlrun = "UPDATE CALCULATION_Q3, FEES_GENERATED_ANS_Q3 SET CALCULATION_Q3.SC_FEE = [CALCULATION_Q3].[Ass_val_excl_cash]*[CALCULATION_Q3].[BPPA_SC] / 100 / 100;"
+        DoCmd.RunSQL (sqlrun)
+        
+        'Setting all nulls to 0 (for total calculations)
+        sqlrun = "UPDATE CALCULATION_Q3 SET CALCULATION_Q3.SC_FEE = 0 WHERE (((CALCULATION_Q3.[SC_FEE]) Is Null));"
+        DoCmd.RunSQL (sqlrun)
+    
+    'Total_fee
+        ' Calculation: IM_fee + IM_VAT_fee + SC_fee
+        sqlrun = "UPDATE CALCULATION_Q3 SET CALCULATION_Q3.TOTAL_FEE = [CALCULATION_Q3].[IM_FEE]+[CALCULATION_Q3].[IM_VAT_FEE]+[CALCULATION_Q3].[SC_Fee];"
+        DoCmd.RunSQL (sqlrun)
+
+    'Actual_IM_fee
+        ' Setting up temporary table containing actual IM fee from FEES_GENERATED_ANS_Q3
+        sqlrun = "SELECT FEES_GENERATED_ANS_Q3.New_root, FEES_GENERATED_ANS_Q3.Charge_type, FEES_GENERATED_ANS_Q3.dr_value INTO tmp_ACTUAL_IM_FEES_Q3 FROM FEES_GENERATED_ANS_Q3 WHERE (((FEES_GENERATED_ANS_Q3.Charge_type) = ""IM_fee"")) GROUP BY FEES_GENERATED_ANS_Q3.New_root, FEES_GENERATED_ANS_Q3.Charge_type, FEES_GENERATED_ANS_Q3.dr_value;"
+        DoCmd.RunSQL (sqlrun)
+        
+        'Populating CALCULATION_Q3.Actual_IM_fees from temporary table field
+        sqlrun = "UPDATE tmp_ACTUAL_IM_FEES_Q3 INNER JOIN CALCULATION_Q3 ON tmp_ACTUAL_IM_FEES_Q3.New_root = CALCULATION_Q3.New_root SET CALCULATION_Q3.ACTUAL_IM_FEE = [tmp_ACTUAL_IM_FEES_Q3].[dr_value];"
+        DoCmd.RunSQL (sqlrun)
+        
+        ' Deleting temporary table
+        DoCmd.DeleteObject acTable, "tmp_ACTUAL_IM_FEES_Q3"
+    
+    'Actual_IM_VAT_fee
+        ' Setting up temporary table containing actual IM VAT fee from FEES_GENERATED_ANS_Q3
+        sqlrun = "SELECT FEES_GENERATED_ANS_Q3.New_root, FEES_GENERATED_ANS_Q3.Charge_type, FEES_GENERATED_ANS_Q3.dr_value INTO tmp_ACTUAL_IM_VAT_FEES_Q3 FROM FEES_GENERATED_ANS_Q3 WHERE (((FEES_GENERATED_ANS_Q3.Charge_type) = ""IM_VAT_fee"")) GROUP BY FEES_GENERATED_ANS_Q3.New_root, FEES_GENERATED_ANS_Q3.Charge_type, FEES_GENERATED_ANS_Q3.dr_value;"
+        DoCmd.RunSQL (sqlrun)
+        
+        'Populating CALCULATION_Q3.Actual_IM_VAT_fees from temporary table field
+        sqlrun = "UPDATE tmp_ACTUAL_IM_VAT_FEES_Q3 INNER JOIN CALCULATION_Q3 ON tmp_ACTUAL_IM_VAT_FEES_Q3.New_root = CALCULATION_Q3.New_root SET CALCULATION_Q3.ACTUAL_IM_VAT_FEE = [tmp_ACTUAL_IM_VAT_FEES_Q3].[dr_value];"
+        DoCmd.RunSQL (sqlrun)
+        
+        ' Deleting temporary table
+        DoCmd.DeleteObject acTable, "tmp_ACTUAL_IM_VAT_FEES_Q3"
+        
+    'Actual_SC_fee
+        ' Setting up temporary table containing actual SC fee from FEES_GENERATED_ANS_Q3
+        sqlrun = "SELECT FEES_GENERATED_ANS_Q3.New_root, FEES_GENERATED_ANS_Q3.Charge_type, FEES_GENERATED_ANS_Q3.dr_value INTO tmp_ACTUAL_SC_FEES_Q3 FROM FEES_GENERATED_ANS_Q3 WHERE (((FEES_GENERATED_ANS_Q3.Charge_type) = ""SC_fee"")) GROUP BY FEES_GENERATED_ANS_Q3.New_root, FEES_GENERATED_ANS_Q3.Charge_type, FEES_GENERATED_ANS_Q3.dr_value;"
+        DoCmd.RunSQL (sqlrun)
+        
+        ' Populating CALCULATION_Q3.Actual_SC_fees from temporary table field
+        sqlrun = "UPDATE tmp_ACTUAL_SC_FEES_Q3 INNER JOIN CALCULATION_Q3 ON tmp_ACTUAL_SC_FEES_Q3.New_root = CALCULATION_Q3.New_root SET CALCULATION_Q3.ACTUAL_SC_FEE = [tmp_ACTUAL_SC_FEES_Q3].[dr_value];"
+        DoCmd.RunSQL (sqlrun)
+        
+        ' Deleting temporary table
+        DoCmd.DeleteObject acTable, "tmp_ACTUAL_SC_FEES_Q3"
+        
+        
+
+
+
+
+
+
+
+
+
+    'Actual_total_fee
+    '    sqlrun = "UPDATE CALCULATION_Q3 INNER JOIN FEES_GENERATED_ANS_Q3 ON CALCULATION_Q3.New_root = FEES_GENERATED_ANS_Q3.New_root SET CALCULATION_Q3.IM_FEE = [FEES_GENERATED_ANS_Q3].[dr_value];"
+    '    DoCmd.RunSQL (sqlrun)
 
 
 
@@ -151,4 +422,5 @@ Sub populate_calculation()
     DoCmd.SetWarnings True
     
 End Sub
+
 

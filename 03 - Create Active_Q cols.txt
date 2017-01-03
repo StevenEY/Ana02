@@ -10,16 +10,16 @@ Public Sub active_quarters()
 
         Dim strSQL As String
         
-        sqlrun = "ALTER TABLE STATIC_DATA ADD COLUMN Active_Q1 FLOAT;"
+        sqlrun = "ALTER TABLE STATIC_DATA_xls ADD COLUMN Active_Q1 FLOAT;"
         DoCmd.RunSQL (sqlrun)
         
-        sqlrun = "ALTER TABLE STATIC_DATA ADD COLUMN Active_Q2 FLOAT;"
+        sqlrun = "ALTER TABLE STATIC_DATA_xls ADD COLUMN Active_Q2 FLOAT;"
         DoCmd.RunSQL (sqlrun)
     
-        sqlrun = "ALTER TABLE STATIC_DATA ADD COLUMN Active_Q3 FLOAT;"
+        sqlrun = "ALTER TABLE STATIC_DATA_xls ADD COLUMN Active_Q3 FLOAT;"
         DoCmd.RunSQL (sqlrun)
         
-        sqlrun = "ALTER TABLE STATIC_DATA ADD COLUMN Active_Q4 FLOAT;"
+        sqlrun = "ALTER TABLE STATIC_DATA_xls ADD COLUMN Active_Q4 FLOAT;"
         DoCmd.RunSQL (sqlrun)
     
 
