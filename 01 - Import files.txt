@@ -12,7 +12,8 @@ Public Sub imp_data()
 
 
     ' Set filepath to Excel documents to import
-    strPath = "Z:\Advisory\SG Hambros\2016\Analytics\ANA02 - Advisory Fee Income\Import files\"  ' Import issue with non-local
+    'strPath = "Z:\Advisory\SG Hambros\2016\Analytics\ANA02 - Advisory Fee Income\Import files\"  ' Import issue with non-local
+    strPath = "C:\Users\2022547\Documents\D\DOCS\Import files\" ' For test purposes while not connected
 
 
     ' Update below vars to indicate if file has multiple tabs

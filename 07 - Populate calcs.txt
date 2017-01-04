@@ -47,6 +47,11 @@ Sub populate_calculation()
         
         ' Deleting temporary table
         DoCmd.DeleteObject acTable, "tmp_VAL_SUM_EXCL_CASH_Q1"
+    
+    'Wrapped_unwrapped_code
+        ' Used for determining minimum fee
+        sqlrun = "UPDATE CALCULATION_Q1 INNER JOIN FEES_GENERATED_ANS_Q1 ON CALCULATION_Q1.New_root = FEES_GENERATED_ANS_Q1.New_root SET CALCULATION_Q1.Wrapped_unwrapped_code = [FEES_GENERATED_ANS_Q1].[DR_STSRTG];"
+        DoCmd.RunSQL (sqlrun)
 
     'BPPA_IM
         ' Creating temporary table
@@ -102,6 +107,35 @@ Sub populate_calculation()
     'Total_fee
         ' Calculation: IM_fee + IM_VAT_fee + SC_fee
         sqlrun = "UPDATE CALCULATION_Q1 SET CALCULATION_Q1.TOTAL_FEE = [CALCULATION_Q1].[IM_FEE]+[CALCULATION_Q1].[IM_VAT_FEE]+[CALCULATION_Q1].[SC_Fee];"
+        DoCmd.RunSQL (sqlrun)
+
+    'Actual_IM_fee
+        'Note: this figure on some occasions may be out because some roots include extraneous IM fee rows in FEES_GENERATED_ANS_Q# - Investigate when these arise
+        
+        ' Setting up temp table with new_root, charge_type, and fee charged
+        sqlrun = "SELECT FEES_GENERATED_ANS_Q1.New_root, FEES_GENERATED_ANS_Q1.Charge_type, Sum(FEES_GENERATED_ANS_Q1.AMOUNT) AS SumOfAMOUNT INTO tmp_IM_fee_Q1 FROM FEES_GENERATED_ANS_Q1 GROUP BY FEES_GENERATED_ANS_Q1.New_root, FEES_GENERATED_ANS_Q1.Charge_type;"
+        DoCmd.RunSQL (sqlrun)
+        
+        sqlrun = "UPDATE tmp_IM_fee_Q1 INNER JOIN CALCULATION_Q1 ON tmp_IM_fee_Q1.New_root = CALCULATION_Q1.New_root SET CALCULATION_Q1.Actual_IM_fee = [tmp_IM_fee_Q1].[SumOfAMOUNT] WHERE (([tmp_IM_fee_Q1].[Charge_type]=""IM_fee_or_IM_VAT_fee""));"
+        DoCmd.RunSQL (sqlrun)
+        
+        ' Deleting temporary table
+        DoCmd.DeleteObject acTable, "tmp_IM_fee_Q1"
+
+    'Actual_SC_fee
+        ' Setting up temp table with new_root, charge_type, and fee charged
+        sqlrun = "SELECT FEES_GENERATED_ANS_Q1.New_root, FEES_GENERATED_ANS_Q1.Charge_type, Sum(FEES_GENERATED_ANS_Q1.AMOUNT) AS SumOfAMOUNT INTO tmp_SC_fee_Q1 FROM FEES_GENERATED_ANS_Q1 GROUP BY FEES_GENERATED_ANS_Q1.New_root, FEES_GENERATED_ANS_Q1.Charge_type;"
+        DoCmd.RunSQL (sqlrun)
+        
+        sqlrun = "UPDATE tmp_SC_fee_Q1 INNER JOIN CALCULATION_Q1 ON tmp_SC_fee_Q1.New_root = CALCULATION_Q1.New_root SET CALCULATION_Q1.Actual_SC_fee = [tmp_SC_fee_Q1].[SumOfAMOUNT] WHERE (([tmp_SC_fee_Q1].[Charge_type]=""SC_fee""));"
+        DoCmd.RunSQL (sqlrun)
+        
+        ' Deleting temporary table
+        DoCmd.DeleteObject acTable, "tmp_SC_fee_Q1"
+
+    'Actual_total_fee
+        ' Calculation: IM_fee + SC_fee
+        sqlrun = "UPDATE CALCULATION_Q1 SET CALCULATION_Q1.Actual_total_fee = [CALCULATION_Q1].[IM_FEE]+[CALCULATION_Q1].[SC_Fee];"
         DoCmd.RunSQL (sqlrun)
 
 
@@ -190,6 +224,11 @@ Sub populate_calculation()
         ' Deleting temporary table
         DoCmd.DeleteObject acTable, "tmp_VAL_SUM_EXCL_CASH_Q2"
 
+    'Wrapped_unwrapped_code
+        ' Used for determining minimum fee
+        sqlrun = "UPDATE CALCULATION_Q2 INNER JOIN FEES_GENERATED_ANS_Q2 ON CALCULATION_Q2.New_root = FEES_GENERATED_ANS_Q2.New_root SET CALCULATION_Q2.Wrapped_unwrapped_code = [FEES_GENERATED_ANS_Q2].[DR_STSRTG];"
+        DoCmd.RunSQL (sqlrun)
+        
     'BPPA_IM
         ' Creating temporary table
         sqlrun = "SELECT STATIC_DATA.New_root, STATIC_DATA.[Charge Type] AS Charge_type, STATIC_DATA.BPPA INTO tmp_CHARGE_TYPE_IM_Q2 FROM STATIC_DATA INNER JOIN CALCULATION_Q2 ON STATIC_DATA.New_root = CALCULATION_Q2.New_root WHERE (((STATIC_DATA.[Charge Type])=""IM Fee"") AND ((CALCULATION_Q2.Ass_val_excl_cash) Between [STATIC_DATA].[Min Value] And [STATIC_DATA].[Max Value])) GROUP BY STATIC_DATA.New_root, STATIC_DATA.[Charge Type], STATIC_DATA.BPPA;"
@@ -246,9 +285,34 @@ Sub populate_calculation()
         sqlrun = "UPDATE CALCULATION_Q2 SET CALCULATION_Q2.TOTAL_FEE = [CALCULATION_Q2].[IM_FEE]+[CALCULATION_Q2].[IM_VAT_FEE]+[CALCULATION_Q2].[SC_Fee];"
         DoCmd.RunSQL (sqlrun)
     
+    'Actual_IM_fee
+        'Note: this figure on some occasions may be out because some roots include extraneous IM fee rows in FEES_GENERATED_ANS_Q# - Investigate when these arise
+        
+        ' Setting up temp table with new_root, charge_type, and fee charged
+        sqlrun = "SELECT FEES_GENERATED_ANS_Q2.New_root, FEES_GENERATED_ANS_Q2.Charge_type, Sum(FEES_GENERATED_ANS_Q2.AMOUNT) AS SumOfAMOUNT INTO tmp_IM_fee_Q2 FROM FEES_GENERATED_ANS_Q2 GROUP BY FEES_GENERATED_ANS_Q2.New_root, FEES_GENERATED_ANS_Q2.Charge_type;"
+        DoCmd.RunSQL (sqlrun)
+        
+        sqlrun = "UPDATE tmp_IM_fee_Q2 INNER JOIN CALCULATION_Q2 ON tmp_IM_fee_Q2.New_root = CALCULATION_Q2.New_root SET CALCULATION_Q2.Actual_IM_fee = [tmp_IM_fee_Q2].[SumOfAMOUNT] WHERE (([tmp_IM_fee_Q2].[Charge_type]=""IM_fee_or_IM_VAT_fee""));"
+        DoCmd.RunSQL (sqlrun)
+        
+        ' Deleting temporary table
+        DoCmd.DeleteObject acTable, "tmp_IM_fee_Q2"
 
+    'Actual_SC_fee
+        ' Setting up temp table with new_root, charge_type, and fee charged
+        sqlrun = "SELECT FEES_GENERATED_ANS_Q2.New_root, FEES_GENERATED_ANS_Q2.Charge_type, Sum(FEES_GENERATED_ANS_Q2.AMOUNT) AS SumOfAMOUNT INTO tmp_SC_fee_Q2 FROM FEES_GENERATED_ANS_Q2 GROUP BY FEES_GENERATED_ANS_Q2.New_root, FEES_GENERATED_ANS_Q2.Charge_type;"
+        DoCmd.RunSQL (sqlrun)
+        
+        sqlrun = "UPDATE tmp_SC_fee_Q2 INNER JOIN CALCULATION_Q2 ON tmp_SC_fee_Q2.New_root = CALCULATION_Q2.New_root SET CALCULATION_Q2.Actual_SC_fee = [tmp_SC_fee_Q2].[SumOfAMOUNT] WHERE (([tmp_SC_fee_Q2].[Charge_type]=""SC_fee""));"
+        DoCmd.RunSQL (sqlrun)
+        
+        ' Deleting temporary table
+        DoCmd.DeleteObject acTable, "tmp_SC_fee_Q2"
 
-
+    'Actual_total_fee
+        ' Calculation: IM_fee + SC_fee
+        sqlrun = "UPDATE CALCULATION_Q2 SET CALCULATION_Q2.Actual_total_fee = [CALCULATION_Q2].[IM_FEE]+[CALCULATION_Q2].[SC_Fee];"
+        DoCmd.RunSQL (sqlrun)
 
 
 
@@ -304,6 +368,11 @@ Sub populate_calculation()
 
         ' Deleting temporary table
         DoCmd.DeleteObject acTable, "tmp_VAL_SUM_EXCL_CASH_Q3"
+        
+    'Wrapped_unwrapped_code
+        ' Used for determining minimum fee
+        sqlrun = "UPDATE CALCULATION_Q3 INNER JOIN STATIC_DATA ON CALCULATION_Q3.New_root = STATIC_DATA.New_root SET CALCULATION_Q3.Wrapped_unwrapped_code = [STATIC_DATA].[SR from CC Screen];"
+        DoCmd.RunSQL (sqlrun)
 
     'BPPA_IM
         ' Creating temporary table
@@ -396,7 +465,11 @@ Sub populate_calculation()
         
         ' Deleting temporary table
         DoCmd.DeleteObject acTable, "tmp_ACTUAL_SC_FEES_Q3"
-        
+    
+    'Actual_total_fee
+        ' Calculation: IM_fee + IM_VAT_fee + SC_fee
+        sqlrun = "UPDATE CALCULATION_Q3 SET CALCULATION_Q3.Actual_total_fee = [CALCULATION_Q3].[IM_FEE]+[CALCULATION_Q3].[IM_VAT_FEE]+[CALCULATION_Q3].[SC_Fee];"
+        DoCmd.RunSQL (sqlrun)
         
 
 
